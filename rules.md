@@ -12,8 +12,10 @@
   - Proper TypeScript typing (no `any`).
   - Accessibility and semantic HTML.
   - Performance optimization.
-  - Consistent coding conventions.
+  - Consistent coding conventions (No Semicolons).
 
 ## 3. Workflow
 - Confirm design/approach before implementation.
-- Step-by-step instructions.
+## 4. Git Workflow
+- **Commits**: Make granular commits for logical units of work.
+- **Branching**: Always create a new branch (`feature/`, `fix/`, etc.) when starting a new feature or task.
