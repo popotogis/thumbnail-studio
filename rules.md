@@ -17,5 +17,5 @@
 ## 3. Workflow
 - Confirm design/approach before implementation.
 ## 4. Git Workflow
-- **Commits**: Make granular commits for logical units of work.
+- **Commits**: Make granular commits (even for small units) to easily track edit history.
 - **Branching**: Always create a new branch (`feature/`, `fix/`, etc.) when starting a new feature or task.
