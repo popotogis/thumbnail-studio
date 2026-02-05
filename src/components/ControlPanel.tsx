@@ -8,6 +8,7 @@ interface ControlPanelProps {
     onRemove: (id: string) => void
     onUpdate: (id: string, updates: Partial<Omit<TextElement, 'style'>>) => void
     onStyleUpdate: (id: string, styleUpdates: Partial<FontConfig>) => void
+    onUpdateBackground: (color: string) => void
 }
 
 export const ControlPanel: React.FC<ControlPanelProps> = ({
@@ -16,10 +17,27 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     onRemove,
     onUpdate,
     onStyleUpdate,
+    onUpdateBackground,
 }) => {
     return (
         <div className="bg-white p-6 rounded-xl shadow-xl h-full overflow-y-auto w-full lg:w-96">
             <h2 className="text-xl font-bold mb-6 border-b pb-2 text-gray-800">編集パネル</h2>
+
+            <div className="mb-8">
+                <h3 className="font-semibold mb-3 text-xs text-gray-500 uppercase tracking-wider">
+                    背景設定
+                </h3>
+                <div className="flex items-center space-x-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <div className="flex-1 text-sm font-medium text-gray-700">背景色</div>
+                    <input
+                        type="color"
+                        className="w-10 h-10 p-0 border-0 rounded cursor-pointer shadow-sm"
+                        value={state.backgroundColor}
+                        onChange={(e) => onUpdateBackground(e.target.value)}
+                    />
+                </div>
+            </div>
+
             {/* Add Button Area */}
             <div className="mb-8">
                 <h3 className="font-semibold mb-3 text-xs text-gray-500 uppercase tracking-wider">

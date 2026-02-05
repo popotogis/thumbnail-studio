@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { toPng } from 'html-to-image'
 import { useThumbnail } from './hooks/useThumbnail'
 import { ThumbnailCanvas } from './components/ThumbnailCanvas'
@@ -8,6 +8,25 @@ function App() {
   const { state, actions } = useThumbnail()
   const canvasRef = useRef<HTMLDivElement>(null)
 
+  const [scale, setScale] = useState(1)
+  const previewContainerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!previewContainerRef.current) return
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const containerWidth = entry.contentRect.width
+        // キャンパス幅 1280px に対して、コンテナ幅に収まる倍率を計算
+        const newScale = Math.min(containerWidth / 1280, 1)
+        setScale(newScale)
+      }
+    })
+
+    observer.observe(previewContainerRef.current)
+    return () => observer.disconnect()
+  }, [])
+
   const handleExport = async () => {
     if (!canvasRef.current) return
 
@@ -15,6 +34,15 @@ function App() {
       // html-to-image でキャプチャ
       const dataUrl = await toPng(canvasRef.current, {
         cacheBust: true,
+        width: 1280,
+        height: 670,
+        pixelRatio: 1,
+        style: {
+          transform: 'scale(1)',
+          transformOrigin: 'top left',
+          width: '1280px',
+          height: '670px',
+        },
       })
 
       // ダウンロードリンクを作成してクリック
@@ -29,8 +57,8 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col p-8 font-sans text-gray-800">
-      <header className="mb-8 flex justify-between items-center">
+    <div className="min-h-screen bg-gray-100 flex flex-col p-4 lg:p-8 font-sans text-gray-800">
+      <header className="mb-4 lg:mb-8 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Thumbnail Studio</h1>
           <p className="text-gray-600">note用サムネイル作成ツール</p>
@@ -43,11 +71,19 @@ function App() {
         </button>
       </header>
 
-      <main className="flex flex-col lg:flex-row gap-8 items-start">
+      <main className="flex flex-col lg:flex-row gap-8 items-start h-[calc(100vh-100px)]">
         {/* Left: Preview Area */}
-        <div className="flex-1 bg-gray-200 p-8 rounded-x1 shadow-inner flex justify-center overflow-auto w-full">
-          <div className="scale-50 origin-top-left lg:scale-75 xl:scale-90 transition-transform shadow-2xl">
-            <ThumbnailCanvas ref={canvasRef} state={state} />
+        <div
+          ref={previewContainerRef}
+          className="flex-1 bg-gray-200 p-4 lg:p-8 rounded-xl shadow-inner flex justify-center items-center overflow-hidden w-full h-[300px] lg:h-auto"
+        >
+          {/* ラッパーでサイズを確保 */}
+          <div style={{ width: 1280 * scale, height: 670 * scale, transition: 'width 0.2s, height 0.2s' }}>
+            <ThumbnailCanvas
+              ref={canvasRef}
+              state={state}
+              scale={scale} // 計算したscaleを渡す
+            />
           </div>
         </div>
 
@@ -58,6 +94,7 @@ function App() {
           onRemove={actions.removeText}
           onUpdate={actions.updateElement}
           onStyleUpdate={actions.updateStyle}
+          onUpdateBackground={actions.updateBackground}
         />
       </main>
     </div>

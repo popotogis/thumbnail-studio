@@ -21,6 +21,14 @@ export const useThumbnail = () => {
         elements: [],
     });
 
+    // 背景色を更新する関数
+    const updateBackground = useCallback((color: string) => {
+        setState((prev) => ({
+            ...prev,
+            backgroundColor: color,
+        }));
+    }, []);
+
     // テキスト要素を追加
     const addText = useCallback((zone: Zone = 'middle-center') => {
         setState((prev) => {
@@ -83,6 +91,7 @@ export const useThumbnail = () => {
             removeText,
             updateElement,
             updateStyle,
+            updateBackground,
         },
     };
 };
