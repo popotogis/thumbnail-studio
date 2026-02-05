@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { toPng } from 'html-to-image'
 import { useThumbnail } from './hooks/useThumbnail'
 import { ThumbnailCanvas } from './components/ThumbnailCanvas'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { TextEditor } from './TextEditor'
 import type { ThumbnailState, Zone, TextElement, FontConfig } from '../types'
 
