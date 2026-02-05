@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { DEFAULT_RESOLUTION } from '../types';
-import type { ThumbnailState, TextElement, Zone, FontConfig } from '../types';
+import type { ThumbnailState, TextElement, Zone, FontConfig, BackgroundConfig } from '../types';
 
 const INITIAL_FONT_STYLE: FontConfig = {
     family: 'sans-serif',
@@ -13,19 +13,44 @@ const INITIAL_FONT_STYLE: FontConfig = {
     letterSpacing: 0,
 };
 
+const INITIAL_BACKGROUND: BackgroundConfig = {
+    type: 'solid',
+    solidColor: '#ffffff',
+    gradient: {
+        type: 'linear',
+        angle: 135,
+        stops: [
+            { id: '1', color: '#ff9a9e', position: 0 },
+            { id: '2', color: '#fad0c4', position: 100 },
+        ],
+        meshPoints: [],
+    },
+};
+
 
 export const useThumbnail = () => {
     const [state, setState] = useState<ThumbnailState>({
         resolution: DEFAULT_RESOLUTION,
-        backgroundColor: '#ffffff',
+        background: INITIAL_BACKGROUND,
         elements: [],
     });
 
     // 背景色を更新する関数
-    const updateBackground = useCallback((color: string) => {
+    const updateBackground = useCallback((updates: Partial<BackgroundConfig>) => {
         setState((prev) => ({
             ...prev,
-            backgroundColor: color,
+            background: { ...prev.background, ...updates },
+        }));
+    }, []);
+
+    const updateGradient = useCallback((updates: Partial<BackgroundConfig['gradient']>) => {
+        setState((prev) => ({
+            ...prev,
+            background: {
+                ...prev.background,
+                type: 'gradient',
+                gradient: { ...prev.background.gradient, ...updates },
+            },
         }));
     }, []);
 
@@ -92,6 +117,7 @@ export const useThumbnail = () => {
             updateElement,
             updateStyle,
             updateBackground,
+            updateGradient,
         },
     };
 };

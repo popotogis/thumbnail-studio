@@ -1,5 +1,7 @@
 import { forwardRef } from 'react'
 import type { ThumbnailState, Zone } from '../types'
+import { getBackgroundStyle } from '../utils/styleHelpers'
+import { MeshGradientRenderer } from './MeshGradientRenderer'
 import { GridOverlay } from './GridOverlay'
 
 interface ThumbnailCanvasProps {
@@ -24,52 +26,59 @@ const ZONE_STYLES: Record<Zone, string> = {
 // forwardRef でラップして、親からDOMを参照できるようにする
 export const ThumbnailCanvas = forwardRef<HTMLDivElement, ThumbnailCanvasProps>(
     ({ state, scale = 1, showGrid = false }, ref) => {
-        const { resolution, backgroundColor, elements } = state
+        const { resolution, background, elements } = state
+
+        const backgroundStyle = getBackgroundStyle(background)
 
         return (
             <div
                 ref={ref}
-                className="overflow-hidden"
+                className="overflow-hidden relative"
                 style={{
                     width: resolution.width,
                     height: resolution.height,
-                    backgroundColor: backgroundColor,
+                    ...backgroundStyle,
                     transform: `scale(${scale})`,
                     transformOrigin: 'top left',
                 }}
             >
-                {showGrid && <GridOverlay />}
-                {/* 3x3 Grid Layout */}
-                <div className="grid grid-cols-3 grid-rows-3 w-full h-full">
-                    {(Object.keys(ZONE_STYLES) as Zone[]).map((zone) => {
-                        // そのゾーンにある要素を抽出し、優先順位でソート
-                        const zoneElements = elements
-                            .filter((e) => e.zone === zone)
-                            .sort((a, b) => a.priority - b.priority)
 
-                        return (
-                            <div key={zone} className={`flex flex-col p-4 ${ZONE_STYLES[zone]}`}>
-                                {zoneElements.map((element) => (
-                                    <div
-                                        key={element.id}
-                                        style={{
-                                            fontFamily: element.style.family,
-                                            fontSize: element.style.size,
-                                            color: element.style.color,
-                                            opacity: element.style.opacity,
-                                            fontWeight: element.style.weight,
-                                            lineHeight: element.style.lineHeight,
-                                            letterSpacing: `${element.style.letterSpacing}em`,
-                                            marginBottom: '0.5rem', // 要素間のGap (仮)
-                                            whiteSpace: 'pre',
-                                        }}
-                                    >
-                                        {element.content}
-                                    </div>
-                                ))}
-                            </div>
-                        )
-                    })}
+                <MeshGradientRenderer config={background} width={resolution.width} height={resolution.height} />
+
+                <div className="relative z-10 w-full h-full">
+                    {showGrid && <GridOverlay />}
+                    {/* 3x3 Grid Layout */}
+                    <div className="grid grid-cols-3 grid-rows-3 w-full h-full">
+                        {(Object.keys(ZONE_STYLES) as Zone[]).map((zone) => {
+                            // そのゾーンにある要素を抽出し、優先順位でソート
+                            const zoneElements = elements
+                                .filter((e) => e.zone === zone)
+                                .sort((a, b) => a.priority - b.priority)
+
+                            return (
+                                <div key={zone} className={`flex flex-col p-4 ${ZONE_STYLES[zone]}`}>
+                                    {zoneElements.map((element) => (
+                                        <div
+                                            key={element.id}
+                                            style={{
+                                                fontFamily: element.style.family,
+                                                fontSize: element.style.size,
+                                                color: element.style.color,
+                                                opacity: element.style.opacity,
+                                                fontWeight: element.style.weight,
+                                                lineHeight: element.style.lineHeight,
+                                                letterSpacing: `${element.style.letterSpacing}em`,
+                                                marginBottom: '0.5rem', // 要素間のGap (仮)
+                                                whiteSpace: 'pre',
+                                            }}
+                                        >
+                                            {element.content}
+                                        </div>
+                                    ))}
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
         )

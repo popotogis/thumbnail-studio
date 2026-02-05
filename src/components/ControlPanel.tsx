@@ -1,5 +1,6 @@
 import { TextEditor } from './TextEditor'
-import type { ThumbnailState, Zone, TextElement, FontConfig } from '../types'
+import type { ThumbnailState, Zone, TextElement, FontConfig, BackgroundConfig } from '../types'
+import { BackgroundSettings } from './BackgroundSettings'
 
 interface ControlPanelProps {
     state: ThumbnailState
@@ -8,7 +9,8 @@ interface ControlPanelProps {
     onRemove: (id: string) => void
     onUpdate: (id: string, updates: Partial<Omit<TextElement, 'style'>>) => void
     onStyleUpdate: (id: string, styleUpdates: Partial<FontConfig>) => void
-    onUpdateBackground: (color: string) => void
+    onUpdateBackground: (updates: Partial<BackgroundConfig>) => void
+    onUpdateGradient: (updates: Partial<BackgroundConfig['gradient']>) => void
     showGrid: boolean
     onToggleGrid: (v: boolean) => void
 }
@@ -20,6 +22,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     onUpdate,
     onStyleUpdate,
     onUpdateBackground,
+    onUpdateGradient,
     showGrid,
     onToggleGrid,
 }) => {
@@ -31,15 +34,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 <h3 className="font-semibold mb-3 text-xs text-gray-500 uppercase tracking-wider">
                     背景設定
                 </h3>
-                <div className="flex items-center space-x-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <div className="flex-1 text-sm font-medium text-gray-700">背景色</div>
-                    <input
-                        type="color"
-                        className="w-10 h-10 p-0 border-0 rounded cursor-pointer shadow-sm"
-                        value={state.backgroundColor}
-                        onChange={(e) => onUpdateBackground(e.target.value)}
-                    />
-                </div>
+                <BackgroundSettings
+                    state={state}
+                    onUpdate={onUpdateBackground}
+                    onGradientUpdate={onUpdateGradient}
+                />
             </div>
 
             <div className="mb-8">

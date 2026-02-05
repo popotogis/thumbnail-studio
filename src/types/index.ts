@@ -24,10 +24,37 @@ export interface TextElement {
     style: FontConfig;
 }
 
+export type GradientType = 'linear' | 'radial' | 'mesh';
+
+export interface GradientStop {
+    id: string;
+    color: string;
+    position: number;
+}
+
+export interface MeshPoint {
+    id: string;
+    x: number;
+    y: number;
+    color: string;
+    radius: number;
+}
+
+export interface BackgroundConfig {
+    type: 'solid' | 'gradient';
+    solidColor: string;
+    gradient: {
+        type: GradientType;
+        angle: number;
+        stops: GradientStop[];
+        meshPoints: MeshPoint[];
+    };
+}
+
 // アプリケーション全体のステート
 export interface ThumbnailState {
     resolution: { width: number; height: number }; // 1280 x 670
-    backgroundColor: string;
+    background: BackgroundConfig;
     elements: TextElement[];
 }
 

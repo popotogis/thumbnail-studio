@@ -103,6 +103,7 @@ function App() {
           onUpdate={actions.updateElement}
           onStyleUpdate={actions.updateStyle}
           onUpdateBackground={actions.updateBackground}
+          onUpdateGradient={actions.updateGradient}
           showGrid={showGrid}
           onToggleGrid={setShowGrid}
         />
