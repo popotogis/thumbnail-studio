@@ -10,6 +10,7 @@ function App() {
 
   const [scale, setScale] = useState(1)
   const previewContainerRef = useRef<HTMLDivElement>(null)
+  const [showGrid, setShowGrid] = useState(true)
 
   useEffect(() => {
     if (!previewContainerRef.current) return
@@ -42,6 +43,12 @@ function App() {
           transformOrigin: 'top left',
           width: '1280px',
           height: '670px',
+        },
+        filter: (node) => {
+          if (node instanceof HTMLElement && node.getAttribute('data-ignore-export')) {
+            return false
+          }
+          return true
         },
       })
 
@@ -83,6 +90,7 @@ function App() {
               ref={canvasRef}
               state={state}
               scale={scale} // 計算したscaleを渡す
+              showGrid={showGrid}
             />
           </div>
         </div>
@@ -95,6 +103,8 @@ function App() {
           onUpdate={actions.updateElement}
           onStyleUpdate={actions.updateStyle}
           onUpdateBackground={actions.updateBackground}
+          showGrid={showGrid}
+          onToggleGrid={setShowGrid}
         />
       </main>
     </div>

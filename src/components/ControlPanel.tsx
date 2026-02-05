@@ -9,6 +9,8 @@ interface ControlPanelProps {
     onUpdate: (id: string, updates: Partial<Omit<TextElement, 'style'>>) => void
     onStyleUpdate: (id: string, styleUpdates: Partial<FontConfig>) => void
     onUpdateBackground: (color: string) => void
+    showGrid: boolean
+    onToggleGrid: (v: boolean) => void
 }
 
 export const ControlPanel: React.FC<ControlPanelProps> = ({
@@ -18,6 +20,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     onUpdate,
     onStyleUpdate,
     onUpdateBackground,
+    showGrid,
+    onToggleGrid,
 }) => {
     return (
         <div className="bg-white p-6 rounded-xl shadow-xl h-full overflow-y-auto w-full lg:w-96">
@@ -35,6 +39,24 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                         value={state.backgroundColor}
                         onChange={(e) => onUpdateBackground(e.target.value)}
                     />
+                </div>
+            </div>
+
+            <div className="mb-8">
+                <h3 className="font-semibold mb-3 text-xs text-gray-500 uppercase tracking-wider">
+                    表示設定
+                </h3>
+                <div className="flex items-center space-x-4 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <div className="flex-1 text-sm font-medium text-gray-700">グリッドガイドを表示</div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                            type="checkbox"
+                            className="sr-only peer"
+                            checked={showGrid}
+                            onChange={(e) => onToggleGrid(e.target.checked)}
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
                 </div>
             </div>
 

@@ -1,9 +1,11 @@
 import { forwardRef } from 'react'
 import type { ThumbnailState, Zone } from '../types'
+import { GridOverlay } from './GridOverlay'
 
 interface ThumbnailCanvasProps {
     state: ThumbnailState
     scale?: number // プレビュー用の縮小率
+    showGrid?: boolean
 }
 
 // ゾーンごとのFlex配置設定
@@ -21,7 +23,7 @@ const ZONE_STYLES: Record<Zone, string> = {
 
 // forwardRef でラップして、親からDOMを参照できるようにする
 export const ThumbnailCanvas = forwardRef<HTMLDivElement, ThumbnailCanvasProps>(
-    ({ state, scale = 1 }, ref) => {
+    ({ state, scale = 1, showGrid = false }, ref) => {
         const { resolution, backgroundColor, elements } = state
 
         return (
@@ -36,6 +38,7 @@ export const ThumbnailCanvas = forwardRef<HTMLDivElement, ThumbnailCanvasProps>(
                     transformOrigin: 'top left',
                 }}
             >
+                {showGrid && <GridOverlay />}
                 {/* 3x3 Grid Layout */}
                 <div className="grid grid-cols-3 grid-rows-3 w-full h-full">
                     {(Object.keys(ZONE_STYLES) as Zone[]).map((zone) => {
