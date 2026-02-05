@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import type { ThumbnailState, Zone } from '../types'
 
 interface ThumbnailCanvasProps {
@@ -19,51 +19,57 @@ const ZONE_STYLES: Record<Zone, string> = {
     'bottom-right': 'justify-end items-end',
 }
 
-export const ThumbnailCanvas: React.FC<ThumbnailCanvasProps> = ({ state, scale = 1 }) => {
-    const { resolution, backgroundColor, elements } = state
+// forwardRef でラップして、親からDOMを参照できるようにする
+export const ThumbnailCanvas = forwardRef<HTMLDivElement, ThumbnailCanvasProps>(
+    ({ state, scale = 1 }, ref) => {
+        const { resolution, backgroundColor, elements } = state
 
-    return (
-        <div
-            className="overflow-hidden shadow-lg"
-            style={{
-                width: resolution.width,
-                height: resolution.height,
-                backgroundColor: backgroundColor,
-                transform: `scale(${scale})`,
-                transformOrigin: 'top left',
-            }}
-        >
-            {/* 3x3 Grid Layout */}
-            <div className="grid grid-cols-3 grid-rows-3 w-full h-full">
-                {(Object.keys(ZONE_STYLES) as Zone[]).map((zone) => {
-                    // そのゾーンにある要素を抽出し、優先順位でソート
-                    const zoneElements = elements
-                        .filter((e) => e.zone === zone)
-                        .sort((a, b) => a.priority - b.priority)
+        return (
+            <div
+                ref={ref}
+                className="overflow-hidden"
+                style={{
+                    width: resolution.width,
+                    height: resolution.height,
+                    backgroundColor: backgroundColor,
+                    transform: `scale(${scale})`,
+                    transformOrigin: 'top left',
+                }}
+            >
+                {/* 3x3 Grid Layout */}
+                <div className="grid grid-cols-3 grid-rows-3 w-full h-full">
+                    {(Object.keys(ZONE_STYLES) as Zone[]).map((zone) => {
+                        // そのゾーンにある要素を抽出し、優先順位でソート
+                        const zoneElements = elements
+                            .filter((e) => e.zone === zone)
+                            .sort((a, b) => a.priority - b.priority)
 
-                    return (
-                        <div key={zone} className={`flex flex-col p-4 ${ZONE_STYLES[zone]}`}>
-                            {zoneElements.map((element) => (
-                                <div
-                                    key={element.id}
-                                    style={{
-                                        fontFamily: element.style.family,
-                                        fontSize: element.style.size,
-                                        color: element.style.color,
-                                        opacity: element.style.opacity,
-                                        fontWeight: element.style.weight,
-                                        lineHeight: element.style.lineHeight,
-                                        letterSpacing: `${element.style.letterSpacing}em`,
-                                        marginBottom: '0.5rem', // 要素間のGap (仮)
-                                    }}
-                                >
-                                    {element.content}
-                                </div>
-                            ))}
-                        </div>
-                    )
-                })}
+                        return (
+                            <div key={zone} className={`flex flex-col p-4 ${ZONE_STYLES[zone]}`}>
+                                {zoneElements.map((element) => (
+                                    <div
+                                        key={element.id}
+                                        style={{
+                                            fontFamily: element.style.family,
+                                            fontSize: element.style.size,
+                                            color: element.style.color,
+                                            opacity: element.style.opacity,
+                                            fontWeight: element.style.weight,
+                                            lineHeight: element.style.lineHeight,
+                                            letterSpacing: `${element.style.letterSpacing}em`,
+                                            marginBottom: '0.5rem', // 要素間のGap (仮)
+                                        }}
+                                    >
+                                        {element.content}
+                                    </div>
+                                ))}
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
-        </div>
-    )
-}
+        )
+    },
+)
+
+ThumbnailCanvas.displayName = 'ThumbnailCanvas'
