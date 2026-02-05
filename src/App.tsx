@@ -11,6 +11,7 @@ function App() {
   const [scale, setScale] = useState(1)
   const previewContainerRef = useRef<HTMLDivElement>(null)
   const [showGrid, setShowGrid] = useState(true)
+  const [isBackgroundEditMode, setIsBackgroundEditMode] = useState(false)
 
   useEffect(() => {
     if (!previewContainerRef.current) return
@@ -91,6 +92,13 @@ function App() {
               state={state}
               scale={scale} // 計算したscaleを渡す
               showGrid={showGrid}
+              isBackgroundEditMode={isBackgroundEditMode}
+              onUpdateMeshPoint={(id, updates) => {
+                const newPoints = state.background.gradient.meshPoints.map(p =>
+                  p.id === id ? { ...p, ...updates } : p
+                );
+                actions.updateGradient({ meshPoints: newPoints });
+              }}
             />
           </div>
         </div>
@@ -106,6 +114,9 @@ function App() {
           onUpdateGradient={actions.updateGradient}
           showGrid={showGrid}
           onToggleGrid={setShowGrid}
+          isBackgroundEditMode={isBackgroundEditMode}
+          onToggleBackgroundEditMode={setIsBackgroundEditMode}
+          onRandomizeMeshPoints={actions.randomizeMeshPoints}
         />
       </main>
     </div>

@@ -13,6 +13,9 @@ interface ControlPanelProps {
     onUpdateGradient: (updates: Partial<BackgroundConfig['gradient']>) => void
     showGrid: boolean
     onToggleGrid: (v: boolean) => void
+    isBackgroundEditMode: boolean
+    onToggleBackgroundEditMode: (v: boolean) => void
+    onRandomizeMeshPoints: () => void
 }
 
 export const ControlPanel: React.FC<ControlPanelProps> = ({
@@ -25,6 +28,9 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     onUpdateGradient,
     showGrid,
     onToggleGrid,
+    isBackgroundEditMode,
+    onToggleBackgroundEditMode,
+    onRandomizeMeshPoints,
 }) => {
     return (
         <div className="bg-white p-6 rounded-xl shadow-xl h-full overflow-y-auto w-full lg:w-96">
@@ -38,6 +44,9 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                     state={state}
                     onUpdate={onUpdateBackground}
                     onGradientUpdate={onUpdateGradient}
+                    isEditMode={isBackgroundEditMode}
+                    onToggleEditMode={onToggleBackgroundEditMode}
+                    onRandomize={onRandomizeMeshPoints}
                 />
             </div>
 

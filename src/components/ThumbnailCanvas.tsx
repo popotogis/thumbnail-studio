@@ -1,13 +1,16 @@
 import { forwardRef } from 'react'
-import type { ThumbnailState, Zone } from '../types'
+import type { ThumbnailState, Zone, MeshPoint } from '../types'
 import { getBackgroundStyle } from '../utils/styleHelpers'
 import { MeshGradientRenderer } from './MeshGradientRenderer'
 import { GridOverlay } from './GridOverlay'
+import { MeshControlOverlay } from './MeshControlOverlay'
 
 interface ThumbnailCanvasProps {
     state: ThumbnailState
-    scale?: number // プレビュー用の縮小率
+    scale?: number
     showGrid?: boolean
+    isBackgroundEditMode?: boolean
+    onUpdateMeshPoint?: (id: string, updates: Partial<MeshPoint>) => void
 }
 
 // ゾーンごとのFlex配置設定
@@ -25,7 +28,7 @@ const ZONE_STYLES: Record<Zone, string> = {
 
 // forwardRef でラップして、親からDOMを参照できるようにする
 export const ThumbnailCanvas = forwardRef<HTMLDivElement, ThumbnailCanvasProps>(
-    ({ state, scale = 1, showGrid = false }, ref) => {
+    ({ state, scale = 1, showGrid = false, isBackgroundEditMode = false, onUpdateMeshPoint }, ref) => {
         const { resolution, background, elements } = state
 
         const backgroundStyle = getBackgroundStyle(background)
@@ -45,7 +48,16 @@ export const ThumbnailCanvas = forwardRef<HTMLDivElement, ThumbnailCanvasProps>(
 
                 <MeshGradientRenderer config={background} width={resolution.width} height={resolution.height} />
 
-                <div className="relative z-10 w-full h-full">
+                {isBackgroundEditMode && onUpdateMeshPoint && (
+                    <MeshControlOverlay
+                        config={background}
+                        width={resolution.width}
+                        height={resolution.height}
+                        onUpdatePoint={onUpdateMeshPoint}
+                    />
+                )}
+
+                <div className={`relative z-10 w-full h-full ${isBackgroundEditMode ? 'pointer-events-none opacity-50' : ''}`}>
                     {showGrid && <GridOverlay />}
                     {/* 3x3 Grid Layout */}
                     <div className="grid grid-cols-3 grid-rows-3 w-full h-full">

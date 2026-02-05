@@ -109,6 +109,30 @@ export const useThumbnail = () => {
         }));
     }, []);
 
+    const randomizeMeshPoints = useCallback(() => {
+        setState((prev) => {
+            if (prev.background.type !== 'gradient' || prev.background.gradient.type !== 'mesh') return prev;
+
+            const newPoints = prev.background.gradient.meshPoints.map(p => ({
+                ...p,
+                x: Math.floor(Math.random() * 101),
+                y: Math.floor(Math.random() * 101),
+                radius: Math.floor(Math.random() * 200) + 50, // 50-250
+            }));
+
+            return {
+                ...prev,
+                background: {
+                    ...prev.background,
+                    gradient: {
+                        ...prev.background.gradient,
+                        meshPoints: newPoints
+                    }
+                }
+            };
+        });
+    }, []);
+
     return {
         state,
         actions: {
@@ -118,6 +142,7 @@ export const useThumbnail = () => {
             updateStyle,
             updateBackground,
             updateGradient,
+            randomizeMeshPoints,
         },
     };
 };

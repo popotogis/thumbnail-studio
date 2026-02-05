@@ -6,9 +6,19 @@ interface BackgroundSettingsProps {
     state: ThumbnailState
     onUpdate: (updates: any) => void
     onGradientUpdate: (updates: any) => void
+    isEditMode?: boolean
+    onToggleEditMode?: (v: boolean) => void
+    onRandomize?: () => void
 }
 
-export const BackgroundSettings: React.FC<BackgroundSettingsProps> = ({ state, onUpdate, onGradientUpdate }) => {
+export const BackgroundSettings: React.FC<BackgroundSettingsProps> = ({
+    state,
+    onUpdate,
+    onGradientUpdate,
+    isEditMode = false,
+    onToggleEditMode,
+    onRandomize
+}) => {
     const { background } = state
 
     const handleAddMeshPoint = () => {
@@ -78,6 +88,25 @@ export const BackgroundSettings: React.FC<BackgroundSettingsProps> = ({ state, o
                     {/* Mesh Gradient Settings */}
                     {background.gradient.type === 'mesh' && (
                         <div>
+                            <div className="flex space-x-2 mb-3">
+                                {onToggleEditMode && (
+                                    <button
+                                        onClick={() => onToggleEditMode(!isEditMode)}
+                                        className={`flex-1 text-xs py-1 rounded border ${isEditMode ? 'bg-green-600 text-white border-green-700' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+                                    >
+                                        {isEditMode ? '調整終了' : 'キャンバスで調整'}
+                                    </button>
+                                )}
+                                {onRandomize && (
+                                    <button
+                                        onClick={onRandomize}
+                                        className="text-xs bg-purple-50 text-purple-700 border border-purple-200 px-3 py-1 rounded hover:bg-purple-100 transition-colors"
+                                    >
+                                        ランダム配置
+                                    </button>
+                                )}
+                            </div>
+
                             <button onClick={handleAddMeshPoint} className="text-sm bg-gray-200 px-2 py-1 rounded mb-2 hover:bg-gray-300 transition-colors">+ ポイント追加</button>
                             <div className="space-y-3">
                                 {background.gradient.meshPoints.map(point => (
@@ -165,7 +194,7 @@ export const BackgroundSettings: React.FC<BackgroundSettingsProps> = ({ state, o
                                     </button>
                                 </div>
                                 <div className="space-y-2">
-                                    {background.gradient.stops.map((stop, index) => (
+                                    {background.gradient.stops.map((stop) => (
                                         <div key={stop.id} className="flex items-center space-x-2 border p-2 rounded bg-gray-50">
                                             <input
                                                 type="color"
