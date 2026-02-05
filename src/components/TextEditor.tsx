@@ -1,5 +1,5 @@
 import React from 'react'
-import type { TextElement, FontConfig, Zone } from '../types'
+import type { TextElement, FontConfig } from '../types'
 import { ZoneSelector } from './ZoneSelector'
 
 interface TextEditorProps {
@@ -16,11 +16,7 @@ const FONT_FAMILIES = [
     { label: 'Dela Gothic One', value: '"Dela Gothic One", cursive' },
 ]
 
-const ZONES: Zone[] = [
-    'top-left', 'top-center', 'top-right',
-    'middle-left', 'middle-center', 'middle-right',
-    'bottom-left', 'bottom-center', 'bottom-right',
-]
+
 
 export const TextEditor: React.FC<TextEditorProps> = ({ element, onUpdate, onStyleUpdate }) => {
     return (
@@ -64,7 +60,7 @@ export const TextEditor: React.FC<TextEditorProps> = ({ element, onUpdate, onSty
                         <select
                             className="w-full p-1 border rounded text-sm"
                             value={element.style.weight}
-                            onChange={(e) => onStyleUpdate(element.id, { weight: e.target.value as any })}
+                            onChange={(e) => onStyleUpdate(element.id, { weight: e.target.value as FontConfig['weight'] })}
                         >
                             <option value="normal">普通</option>
                             <option value="bold">太字</option>
