@@ -64,10 +64,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col p-4 lg:p-8 font-sans text-gray-800">
+    <div className="min-h-screen bg-gray-100 flex flex-col px-4 pb-4 pt-14 lg:p-8 font-sans text-gray-800">
       <header className="mb-4 lg:mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Thumbnail Studio</h1>
+          <h1 className="text-xl lg:text-3xl font-bold text-gray-900">Thumbnail Studio</h1>
           <p className="text-gray-600">note用サムネイル作成ツール</p>
         </div>
         <button
@@ -78,11 +78,11 @@ function App() {
         </button>
       </header>
 
-      <main className="flex flex-col lg:flex-row gap-8 items-start h-[calc(100vh-100px)]">
+      <main className="flex flex-col lg:flex-row gap-8 items-start lg:h-[calc(100vh-100px)]">
         {/* Left: Preview Area */}
         <div
           ref={previewContainerRef}
-          className="flex-1 bg-gray-200 p-4 lg:p-8 rounded-xl shadow-inner flex justify-center items-center overflow-hidden w-full h-[300px] lg:h-auto"
+          className="flex-1 bg-gray-200 p-4 lg:p-8 rounded-xl shadow-inner flex justify-center items-center overflow-hidden w-full aspect-[1280/670] lg:aspect-auto lg:h-auto"
         >
           {/* ラッパーでサイズを確保 */}
           <div style={{ width: 1280 * scale, height: 670 * scale, transition: 'width 0.2s, height 0.2s' }}>
