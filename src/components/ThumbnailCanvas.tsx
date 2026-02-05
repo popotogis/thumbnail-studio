@@ -58,6 +58,7 @@ export const ThumbnailCanvas = forwardRef<HTMLDivElement, ThumbnailCanvasProps>(
                                             lineHeight: element.style.lineHeight,
                                             letterSpacing: `${element.style.letterSpacing}em`,
                                             marginBottom: '0.5rem', // 要素間のGap (仮)
+                                            whiteSpace: 'pre',
                                         }}
                                     >
                                         {element.content}
