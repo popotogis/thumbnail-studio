@@ -51,8 +51,6 @@ export const ThumbnailCanvas = forwardRef<HTMLDivElement, ThumbnailCanvasProps>(
                 {isBackgroundEditMode && onUpdateMeshPoint && (
                     <MeshControlOverlay
                         config={background}
-                        width={resolution.width}
-                        height={resolution.height}
                         onUpdatePoint={onUpdateMeshPoint}
                     />
                 )}

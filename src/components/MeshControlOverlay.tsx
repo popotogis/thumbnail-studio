@@ -1,14 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import type { BackgroundConfig, MeshPoint } from '../types';
 
 interface MeshControlOverlayProps {
     config: BackgroundConfig;
-    width: number;
-    height: number;
     onUpdatePoint: (id: string, updates: Partial<MeshPoint>) => void;
 }
 
-export const MeshControlOverlay: React.FC<MeshControlOverlayProps> = ({ config, width, height, onUpdatePoint }) => {
+export const MeshControlOverlay: React.FC<MeshControlOverlayProps> = ({ config, onUpdatePoint }) => {
     const [draggingId, setDraggingId] = useState<string | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
