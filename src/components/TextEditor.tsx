@@ -1,5 +1,6 @@
 import React from 'react'
 import type { TextElement, FontConfig, Zone } from '../types'
+import { ZoneSelector } from './ZoneSelector'
 
 interface TextEditorProps {
     element: TextElement
@@ -37,17 +38,10 @@ export const TextEditor: React.FC<TextEditorProps> = ({ element, onUpdate, onSty
             {/* Grid Zone Selection */}
             <div className="mb-3">
                 <label className="block text-xs font-bold text-gray-700 mb-1">配置ゾーン</label>
-                <select
-                    className="w-full p-2 border rounded text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                <ZoneSelector
                     value={element.zone}
-                    onChange={(e) => onUpdate(element.id, { zone: e.target.value as Zone })}
-                >
-                    {ZONES.map((z) => (
-                        <option key={z} value={z}>
-                            {z}
-                        </option>
-                    ))}
-                </select>
+                    onChange={(z) => onUpdate(element.id, { zone: z })}
+                />
             </div>
             {/* Style Controls */}
             <div className="space-y-3">
