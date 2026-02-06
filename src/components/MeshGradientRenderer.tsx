@@ -22,12 +22,12 @@ export const MeshGradientRenderer: React.FC<MeshGradientRendererProps> = ({ conf
                         position: 'absolute',
                         left: `${point.x}%`,
                         top: `${point.y}%`,
-                        width: `${point.radius * 2}px`, // 直径にする
-                        height: `${point.radius * 2}px`,
-                        backgroundColor: point.color,
-                        filter: 'blur(80px)', // 好みで調整。大きくすると馴染む
+                        width: `${point.radius * 4}px`, // blurの広がりを考慮して大きめにする
+                        height: `${point.radius * 4}px`,
+                        background: `radial-gradient(circle, ${point.color} 0%, transparent 70%)`,
                         transform: 'translate(-50%, -50%)',
-                        borderRadius: '50%',
+                        pointerEvents: 'none',
+                        willChange: 'transform', // パフォーマンス向上のヒント
                         opacity: 0.8,
                     }}
                 />
