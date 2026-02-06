@@ -54,16 +54,27 @@ export const MeshControlOverlay: React.FC<MeshControlOverlayProps> = ({ config, 
                         left: `${point.x}%`,
                         top: `${point.y}%`,
                         transform: 'translate(-50%, -50%)',
-                        width: '24px',
-                        height: '24px',
-                        backgroundColor: point.color,
-                        border: '3px solid white',
-                        borderRadius: '50%',
-                        boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+                        width: '60px',
+                        height: '60px',
                         cursor: 'move',
                         zIndex: 60,
+                        touchAction: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                     }}
-                />
+                >
+                    <div
+                        style={{
+                            width: '24px',
+                            height: '24px',
+                            backgroundColor: point.color,
+                            border: '3px solid white',
+                            borderRadius: '50%',
+                            boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+                        }}
+                    />
+                </div>
             ))}
         </div>
     );

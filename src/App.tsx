@@ -75,7 +75,7 @@ function App() {
           onClick={handleExport}
           className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow transition-colors flex items-center cursor-pointer"
         >
-          <span className="mr-2">↓</span> 画像を書き出し
+          画像を書き出し
         </button>
       </header>
 
