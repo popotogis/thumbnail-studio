@@ -51,6 +51,26 @@ function App() {
           }
           return true
         },
+        // @ts-expect-error onClone is missing in some versions of @types/html-to-image but works in runtime
+        onClone: (clonedDoc: Document) => {
+          // 書き出し時のみ、MeshGradientを高品質なBlurに戻す
+          const meshPoints = clonedDoc.querySelectorAll('[data-mesh-point="true"]')
+          meshPoints.forEach((el) => {
+            if (el instanceof HTMLElement) {
+              const color = el.dataset.color
+              const originalRadius = Number(el.dataset.originalRadius)
+
+              if (color && !isNaN(originalRadius)) {
+                el.style.width = `${originalRadius * 2}px`
+                el.style.height = `${originalRadius * 2}px`
+                el.style.background = color
+                el.style.filter = 'blur(80px)'
+                // radial-gradient用の拡大を打ち消すためにサイズを戻したので、transformはそのままでOK
+                // (transform translate(-50%, -50%) は中心基準なのでサイズ変更しても中心はズレない)
+              }
+            }
+          })
+        },
       })
 
       // ダウンロードリンクを作成してクリック

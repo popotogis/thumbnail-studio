@@ -18,6 +18,9 @@ export const MeshGradientRenderer: React.FC<MeshGradientRendererProps> = ({ conf
             {config.gradient.meshPoints.map((point) => (
                 <div
                     key={point.id}
+                    data-mesh-point="true"
+                    data-color={point.color}
+                    data-original-radius={point.radius}
                     style={{
                         position: 'absolute',
                         left: `${point.x}%`,
